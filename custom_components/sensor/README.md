@@ -38,8 +38,9 @@ Get the id for each stop you need and add them to your configuration.
 For each line that passes you get a new sensor.stib_[stopid]_[stopname]_[mode][line].
 
 The state returns the waiting time for the next vehicles : 
-```
-sensor.stib_6113_germoir_T81      (Montgomery) - 8 (Montgomery)
+
+```text
+sensor.stib_6113_germoir_T81      1 (Montgomery) - 8 (Montgomery)
 ```
 
 Other attributes are :
