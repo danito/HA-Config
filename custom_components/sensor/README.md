@@ -35,7 +35,7 @@ The result is a xml file with data for each stop:
 ```
 Get the id for each stop you need and add them to your configuration.
 
-For each line that passes you get a new sensor.stib_[stopid]_[stopname]_[mode][line].
+For each line that passes you get a new sensor.stib\_[stopid]\_[stopname]\_[mode][line].
 
 The state returns the waiting time for the next vehicles : 
 
