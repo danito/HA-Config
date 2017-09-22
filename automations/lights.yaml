@@ -1,0 +1,63 @@
+
+- id: notifyswitch
+  alias: "Message si lumière est allumée"
+  initial_state: 'on'
+  trigger:
+     platform: state
+     entity_id: switch.lampe_lecture
+     from: "off"
+     to: "on"
+  action:
+     service: notify.telegram
+     data:
+        message: "Lampe allumée"
+
+
+- id: allumerLampe
+  alias: "Lampe lecture: allumer 1h avant couché du soleil"
+  initial_state: "on"
+  trigger:
+    platform: sun
+    event: sunset
+    offset: "-01:00:00"
+  condition:  
+    condition: state
+    entity_id: switch.lampe_lecture
+    state: "off"
+  action:   
+    service: homeassistant.turn_on
+    entity_id: switch.lampe_lecture
+
+- id: lampe_tele_on
+  alias: 'Lampe Télé: allumer avec télé'
+  initial_state: 'on'
+  trigger: 
+    platform: state
+    entity_id: media_player.tele
+    to: "on"
+  condition:
+    condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: light.lampe_tele
+    - service: notity.dan_gsm
+      data: 
+        message: "La télé a été allumé"
+        title: "La maison vous parle"
+
+
+
+- id: lampe_tele_off
+  alias: "Lampe Télé: éteindre avec télé"
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: media_player.tele
+    to: "off"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: light.lampe_tele
+    - delay: 00:01:30
+   

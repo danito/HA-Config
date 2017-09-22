@@ -1,0 +1,36 @@
+
+- id: duree_tele
+  alias: "Notification: durée télé allumé"
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: media_player.tele
+    to: "off"
+  action:
+    - service: notify.dan_gsm
+      data:
+         title: "La maison vous parle"
+         message: "La télé a été éteinte. {{relative_time(states.media_player.tele.last_changed)}} "
+
+- id: message_matin
+  alias: "Notification: message de 7h30"
+  initial_state: "on"
+  trigger:
+    platform: time
+    at: '07:30:00'
+  condition:
+    condition: time
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+  action:
+    - service: media_player.media_play_pause
+      entity_id: media_player.mpd_pirate_radio
+    - service: tts.google_say
+      entity_id: media_player.mpd_pirate_radio
+      data: 
+         message: "Bonjour. il est 7h30. Il est temps de s'habiller. La météo pour aujourd'hui: actuellement il fait {{states('sensor.pws_temp_c')}} degrés et pn prévoit jusqu'à {{states('sensor.pws_temp_high_1d_c')}} degrés. Il y a {{states('sensor.pws_precip_1d')}} % de chances de pluie aujourd'hui."
+

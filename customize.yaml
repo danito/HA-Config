@@ -1,0 +1,58 @@
+  # Media Player
+  media_player.mpd_pirate_radio:
+          friendly_name: 'Pirate Radio'
+  media_player.mpd_hassio:
+          friendly_name: 'Hassio Radio'
+
+
+  # Desk SKy
+sensor.dark_sky_temperature:
+  friendly_name: "Temperature"
+sensor.dark_sky_summary:
+  friendly_name: "Summary"
+sensor.dark_sky_humidity:
+  friendly_name: "Humidity"
+sensor.dark_sky_precip:
+  friendly_name: "Precip Type"
+sensor.dark_sky_precip_probability:
+  friendly_name: "Precip Probability"
+
+  # Stib
+sensor.stib_5719_saintdenis_b54:
+  friendly_name: "B54"
+sensor.stib_5719_saintdenis_b50:
+  friendly_name: "B50"
+sensor.stib_5719_saintdenis_t97:
+  friendly_name: "T97"
+sensor.stib_5719_saintdenis_t82:
+  friendly_name: "T82"
+sensor.stib_5719_saintdenis_t32:
+  friendly_name: "T32"
+sensor.stib_5152_saintdenis_b54:
+  friendly_name: "B54"
+sensor.stib_5152_saintdenis_b50:
+  friendly_name: "B50"
+sensor.stib_5152_saintdenis_t97:
+  friendly_name: "T97"
+sensor.stib_5152_saintdenis_t82:
+  friendly_name: "T82"
+sensor.stib_5152_saintdenis_t32:
+  friendly_name: "T32"
+
+  # sensors RFXTRX
+
+sensor.08500401340200a959_temperature:
+  friendly_name: "RFX A"
+sensor.085004039a0300b140_temperature:
+  friendly_name: "RFX B"
+sensor.08500411be01007940_temperature:
+  friendly_name: "RFX C"
+sensor.085004bf1f02008d49_temperature:
+  friendly_name: "RFX D"
+sensor.0a52030222010093380049_temperature:
+  friendly_name: "RFX E"
+
+
+  # Groups
+group.all_automations:
+  hidden: false

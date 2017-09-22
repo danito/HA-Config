@@ -1,0 +1,313 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude 
+  longitude: !secret longitude 
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 20.54
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Brussels
+
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+   api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+   #base_url: jf26n.myqnapcloud.com:58123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+   include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+logger:
+        #default: warning 
+   default: debug 
+   logs:
+      homeassistant.custom_components.sensor: debug
+      homeassistant.components.rfxtrx: info
+      homeassistant.components.google_travel_time: debug
+      homeassistant.components.media_player: debug
+      homeassistant.components.device_tracker.mqtt_json: debug
+      
+# Track the sun
+sun:
+
+# rfxtrx
+rfxtrx:
+  device: /dev/ttyUSB0
+  debug: true
+
+# Weather prediction
+sensor:
+  - platform: yr
+    name: Météo
+    monitored_conditions:
+      - temperature
+      - symbol
+      - precipitation
+  - platform: rfxtrx
+    automatic_add: true
+    devices:
+      08500401340200a659:
+        name: rfx_a
+      085004069a0300aa50:
+        name: rfx_b
+      0a520308220100aa390049:  
+        name: rxf_c
+  - platform: darksky
+    api_key: c96c123cd6188888d2572b06978425cf
+    monitored_conditions:
+       - summary
+       - icon
+       - temperature
+       - precip_intensity
+       - wind_speed
+       - apparent_temperature
+       - wind_bearing
+       - precip_intensity_max
+       - minutely_summary
+       - hourly_summary
+       - daily_summary
+  - platform: wunderground
+    api_key: !secret pws_api_key
+    lang: FR
+    monitored_conditions:
+      - temp_high_record_c
+      - temp_high_1d_c
+      - temp_c
+      - temp_low_1d_c
+      - temp_low_record_c
+      - precip_1d
+      - precip_1d_mm
+      - wind_kph
+      - wind_1d_kph
+      - alerts
+      - precip_today_string
+      - weather
+      - weather_1d_metric
+      - weather_1n_metric
+      - weather_2d_metric
+      - weather_2n_metric
+      - weather_3d_metric
+      - weather_3n_metric
+      - weather_4d_metric
+      - weather_4n_metric
+       
+  - platform: google_travel_time
+    api_key: !secret google_api_key
+    name: Retour à la maison
+    origin: device_tracker.dan_oneplus5
+    destination: zone.home
+    options:
+       mode: bicycling
+  - platform: google_travel_time
+    api_key: !secret google_api_key
+    name: Ecole
+    origin: zone.home
+    destination: zone.ecole
+    options:
+       mode: transit
+  - platform: time_date
+    display_options:
+            - 'date_time'
+  - platform: systemmonitor
+    resources:
+      - type: memory_free
+      - type: memory_use_percent
+      - type: processor_use
+      - type: since_last_boot
+  - platform: template
+    sensors:
+      solar_angle:
+        value_template: '{{ states.sun.sun.attributes.elevation }}'
+        friendly_name: 'Sun angle'
+        unit_of_measurement: 'degrees'
+      sunrise:
+        value_template: '{{ states.sun.sun.attributes.next_rising }}'
+    station_id: 5152
+    line: 97
+  - platform: citybikes
+    name: "Villo"
+    stations:
+       - 234
+       - 236 
+  - platform: stib
+    station_ids:
+        - 5719
+        - 5152
+
+# Text to speech
+tts:
+  - platform: google
+    language: "fr"
+
+group: !include groups.yaml
+# automation: !include automations.yaml
+automation: !include_dir_merge_list automations/
+
+telegram_bot:
+  - platform: polling
+    api_key: !secret tg_api_key 
+    parse_mode: html
+    allowed_chat_ids:
+      - 109359376
+
+switch:
+    - platform: tplink
+      host: 192.168.1.128
+    - platform: rfxtrx
+      automatic_add: true 
+    - platform: template
+      switches:
+        sw_tele:
+          friendly_name: 'Télé'
+          value_template: " {{ is_state('media_player.tele', 'on') }} "
+          turn_on:
+            service: media_player.turn_on
+            entity_id: media_player.tele
+          turn_off:
+            service: media_player.turn_off
+            entity_id: media_player.tele
+
+notify:
+    - name: pushbullet
+      platform: pushbullet
+      api_key: !secret pushb_api_key
+    - name: telegram
+      platform: telegram
+      chat_id: !secret tg_chat_id
+    - name: dan_gsm
+      platform: zanzito
+      device-name: gsm_dan
+
+# Zones
+zone:
+  name: ecole
+  latitude: 50.8191122
+  longitude: 4.3387114999
+  radius: 250
+  icon: mdi:school
+zone 2:
+  name: PE BXL
+  latitude: 50.838677499
+  longitude: 4.37628515625006
+  radius: 200
+  icon: mdi:work
+zone 3:
+  name: PE STR
+  latitude: 48.5975758
+  longitude: 7.7686107999999985
+  radius: 250
+  icon: mdi:work
+zone 4:
+  name: STR
+  latitude: 48.60486749999999
+  longitude: 7.754113281249986
+  radius: 250
+  icon: mdi:home
+zone 5:
+  name: Badje
+  latitude: 50.829125
+  longitude: 4.335210
+  radius: 250
+  icon: mdi:work
+
+
+mqtt:
+   broker: 192.168.1.10
+   port: 1883
+   client_id: hassio
+   keepalive: 60
+   username: dan
+   password: mosJF26l9
+
+media_player:
+  - platform: braviatv
+    host: 192.168.1.76
+    name: "Télé"
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+  - platform: mpd
+    host: 192.168.1.100
+    name: "mpd_pirate_radio"
+  - platform: mpd
+    host: 192.168.1.56
+    name: "mpd_hassio"
+
+
+device_tracker:      
+    - platform: owntracks
+      max_gps_accuracy: 200
+      waypoints: True
+      waypoint_whitelist:
+      - travail
+      - ecole
+#    - platform: nmap_tracker
+#      hosts: 192.168.1.1/24
+#      track_new_devices: yes
+#      home_interval: 10
+#      exclude:
+#      - 192.168.1.10
+#      - 192.168.1.11
+#      - 192.168.1.16
+#      - 192.168.1.43
+#      - 192.168.1.56
+#      - 192.168.1.1
+    - platform: asuswrt
+      host: 192.168.1.1
+      username: nxd4n
+      password: asuJF26l9
+      protocol: telnet
+    - platform: mqtt_json
+      devices:
+        dan_gsm: zanzito/gsm_dan/location
+
+weather:
+
+zwave:    
+  usb_path: /dev/ttyACM0
+
+cover:
+  - platform: rfxtrx
+    automatic_add: False
+    signal_repetitions: 1
+    devices:
+      071a000005555502: # RFY
+        name: Stores éléctriques
+ 
+light:
+   - platform: yeelight
+     devices: 
+       192.168.1.71:
+         name: 'Lampe Télé'
+

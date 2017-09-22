@@ -1,0 +1,9 @@
+zwave._:
+  ignored: true
+  polling_intensity: 1
+zwave.zwaveme_zme_uzb1_usb_stick:
+  ignored: false
+  polling_intensity: 1
+switch.fi_plug_switch:
+  ignored: false
+  polling_intensity: 1
