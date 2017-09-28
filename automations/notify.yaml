@@ -10,7 +10,7 @@
     - service: notify.dan_gsm
       data:
          title: "La maison vous parle"
-         message: "La télé a été éteinte. {{relative_time(states.media_player.tele.last_changed)}} "
+         message: "La télé a été éteinte. {{states('sensor.tv_on')}} "
 
 - id: message_matin
   alias: "Notification: message de 7h30"
@@ -31,6 +31,23 @@
       entity_id: media_player.mpd_pirate_radio
     - service: tts.google_say
       entity_id: media_player.mpd_pirate_radio
-      data: 
-         message: "Bonjour. il est 7h30. Il est temps de s'habiller. La météo pour aujourd'hui: actuellement il fait {{states('sensor.pws_temp_c')}} degrés et pn prévoit jusqu'à {{states('sensor.pws_temp_high_1d_c')}} degrés. Il y a {{states('sensor.pws_precip_1d')}} % de chances de pluie aujourd'hui."
+      data_template: 
+      #         message:  "il fait {{states('sensor.pws_temp_high_1d_c')}} "
+        message: "Bonjour. il est {{states('sensor.time').replace(':','h')}}. Il est temps de s'habiller. La météo pour aujourd'hui: actuellement il fait {{states('sensor.pws_weather')}} avec {{states('sensor.pws_temp_c')|int}} degrés et on prévoit jusqu'à {{states('sensor.pws_temp_high_1d_c')|int}} degrés. Il y a  {{states('sensor.pws_precip_1d')}} % de chances de pluie aujourd'hui."
+    - service: media_player.media_stop
+      entity_id: media_player.mpd_pirate_radio
+
+
+- id: notifyswitch
+  alias: "Notification: Lampe lecture allumé"
+  initial_state: 'on'
+  trigger:
+     platform: state
+     entity_id: switch.lampe_lecture
+     from: "off"
+     to: "on"
+  action:
+     service: notify.telegram
+     data:
+        message: "Lampe allumée"
 

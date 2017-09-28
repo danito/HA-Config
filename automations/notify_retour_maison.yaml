@@ -1,0 +1,19 @@
+
+- id: notify_retour_home
+  alias: "Notification: Dan retour à la maison"
+  initial_state: 'on'
+  trigger:
+      platform: mqtt
+      topic: zanzito/dan_gsm/retour_maison
+      payload: 'Retour'
+  action:
+      - service: media_player.media_play_pause
+        entity_id: media_player.mpd_pirate_radio
+      - service: tts.google_say
+        entity_id: media_player.mpd_pirate_radio
+        data_template: 
+          message: "Bonjour. Voici un message de Daniel. Il est en route. Il est à {{states.sensor.retour_a_la_maison.attributes.distance | replace ('.',',') }}. Il va arriver dans {{states('sensor.retour_a_la_maison')}} minutes."
+      - service: media_player.media_stop
+        entity_id: media_player.mpd_pirate_radio
+
+  

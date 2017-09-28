@@ -29,6 +29,7 @@
     view: yes
     icon: mdi:home-assistant
     entities:
+       - group.statistics
        - group.all_automations
        - group.rfxtrx_sensors
        - sensor.085004bf1f02008d49_temperature
@@ -85,6 +86,7 @@
       - sensor.pws_wind_1d_kph
       - sensor.pws_alerts
       - sensor.085004bf1f02008d49_temperature
+      - sensor.outside_temperature
   sun_elevation:
     name: azimut solaire
     entities:
@@ -145,12 +147,19 @@
      name: "Capteurs RFXTRX"
      icon: mdi:remote
      entities:
-       - sensor.08500401340200a959_temperature
-       - sensor.085004039a0300b140_temperature
-       - sensor.08500411be01007940_temperature
-       - sensor.085004bf1f02008d49_temperature
-       - sensor.0a52030222010093380049_temperature
-       - sensor.08500404340200a659_temperature
-       - sensor.085004059a0300aa50_temperature
-       - sensor.0a520301220100a23a0049_temperature
-
+       - sensor.rfx_a_659_temperature
+       - sensor.rfx_b_a50_temperature
+       - sensor.rxf_c_049_temperature
+       - sensor.rxf_d_849_temperature
+             # - sensor.085004039a0300b140_temperature
+             #       - sensor.08500411be01007940_temperature
+             #       - sensor.085004bf1f02008d49_temperature
+             #       - sensor.0a52030222010093380049_temperature
+             #       - sensor.08500404340200a659_temperature
+             #       - sensor.085004059a0300aa50_temperature
+             #       - sensor.0a520301220100a23a0049_temperature
+  statistics:
+     name: "Statistiques"
+     icon: mdi:chart-line
+     entities:
+       - sensor.tv_on

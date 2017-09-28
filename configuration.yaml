@@ -84,7 +84,7 @@ sensor:
       0a520308220100aa390049:  
         name: rxf_c
   - platform: darksky
-    api_key: c96c123cd6188888d2572b06978425cf
+    api_key: !secret dark_api_key
     monitored_conditions:
        - summary
        - icon
@@ -179,7 +179,7 @@ telegram_bot:
     api_key: !secret tg_api_key 
     parse_mode: html
     allowed_chat_ids:
-      - 109359376
+      - !secret tg_chat_id
 
 switch:
     - platform: tplink
@@ -210,36 +210,7 @@ notify:
       device-name: gsm_dan
 
 # Zones
-zone:
-  name: ecole
-  latitude: 50.8191122
-  longitude: 4.3387114999
-  radius: 250
-  icon: mdi:school
-zone 2:
-  name: PE BXL
-  latitude: 50.838677499
-  longitude: 4.37628515625006
-  radius: 200
-  icon: mdi:work
-zone 3:
-  name: PE STR
-  latitude: 48.5975758
-  longitude: 7.7686107999999985
-  radius: 250
-  icon: mdi:work
-zone 4:
-  name: STR
-  latitude: 48.60486749999999
-  longitude: 7.754113281249986
-  radius: 250
-  icon: mdi:home
-zone 5:
-  name: Badje
-  latitude: 50.829125
-  longitude: 4.335210
-  radius: 250
-  icon: mdi:work
+zone: !include_dir_merge_list zones/
 
 
 mqtt:
