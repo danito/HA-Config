@@ -1,8 +1,8 @@
   # Media Player
-  media_player.mpd_pirate_radio:
-          friendly_name: 'Pirate Radio'
-  media_player.mpd_hassio:
-          friendly_name: 'Hassio Radio'
+media_player.mpd_pirate_radio:
+  friendly_name: 'Pirate Radio'
+media_player.mpd_hassio:
+  friendly_name: 'Hassio Radio'
 
 
   # Desk SKy

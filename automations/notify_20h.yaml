@@ -19,5 +19,5 @@
     - service: tts.google_say
       entity_id: media_player.mpd_pirate_radio
       data_template: 
-        message: "Bonsoir. il est {{states('sensor.time').replace(':','h')}}. Il est temps de se mettre en pyjama. Les prévisions pour demain: {{states('sensor.pws_weather_1d_metric')}}. Avec jusqu'à {{states('sensor.pws_temp_high_1d_c')|int}} degrés."
+        message: "Bonsoir. il est {{states('sensor.time').replace(':','h')}}. Il est temps de se mettre en pyjama. Les prévisions pour demain: {{states('sensor.pws_weather_1d_metric')|replace('°C',' degrés')}}. Avec jusqu'à {{states('sensor.pws_temp_high_1d_c')|int}} degrés."
     - service: media_player.media_stop

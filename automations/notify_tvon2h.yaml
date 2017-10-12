@@ -1,0 +1,27 @@
+
+- id: message_tele_2h
+  alias: "Notification: message 2h de télé"
+  initial_state: "on"
+  trigger:
+    platform: state
+    entity_id: media_player.tele
+    to: "on"
+    for: 
+      hours: 2
+  condition:
+     condition: time
+     weekday:
+       - sat
+       - sun
+     before: "11:00:00"
+  action:
+    - service: media_player.media_play_pause
+      entity_id: media_player.mpd_pirate_radio
+    - service: tts.google_say
+      entity_id: media_player.mpd_pirate_radio
+      data_template: 
+        message: "Bonjour. Vous avez dépassé les 2 heures de télé ce matin. Elle va s'éteindre dans 3... 2... 1..."
+    - service: media_player.media_stop
+      entity_id: media_player.mpd_pirate_radio
+    - service: media_player.turn_off
+      entity_id: media_player.tele

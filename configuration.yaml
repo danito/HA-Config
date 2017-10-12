@@ -49,8 +49,8 @@ history:
 # View all events in a logbook
 logbook:
 logger:
-        #default: warning 
-   default: debug 
+   default: warning 
+    #default: debug 
    logs:
       homeassistant.custom_components.sensor: debug
       homeassistant.components.rfxtrx: info
@@ -78,29 +78,20 @@ sensor:
     automatic_add: true
     devices:
       08500401340200a659:
-        name: rfx_a
+        name: rfx_a_659
       085004069a0300aa50:
-        name: rfx_b
+        name: rfx_b_a50
       0a520308220100aa390049:  
-        name: rxf_c
-  - platform: darksky
-    api_key: !secret dark_api_key
-    monitored_conditions:
-       - summary
-       - icon
-       - temperature
-       - precip_intensity
-       - wind_speed
-       - apparent_temperature
-       - wind_bearing
-       - precip_intensity_max
-       - minutely_summary
-       - hourly_summary
-       - daily_summary
+        name: rxf_c_049
+      085004d11f0200b849:
+        name: rxf_d_849
   - platform: wunderground
     api_key: !secret pws_api_key
     lang: FR
     monitored_conditions:
+      - location
+      - station_id
+      - solarradiation
       - temp_high_record_c
       - temp_high_1d_c
       - temp_c
@@ -122,13 +113,20 @@ sensor:
       - weather_4d_metric
       - weather_4n_metric
        
+
+    #- platform: gtfs
+    #    origin: 5719
+    #    destination: 9658
+    #    data: gtfs.zip
+    #    name: GTFS
   - platform: google_travel_time
     api_key: !secret google_api_key
     name: Retour à la maison
     origin: device_tracker.dan_oneplus5
     destination: zone.home
     options:
-       mode: bicycling
+       mode: driving
+       #mode: bicycling
   - platform: google_travel_time
     api_key: !secret google_api_key
     name: Ecole
@@ -139,6 +137,7 @@ sensor:
   - platform: time_date
     display_options:
             - 'date_time'
+            - 'time'
   - platform: systemmonitor
     resources:
       - type: memory_free
@@ -153,8 +152,11 @@ sensor:
         unit_of_measurement: 'degrees'
       sunrise:
         value_template: '{{ states.sun.sun.attributes.next_rising }}'
-    station_id: 5152
-    line: 97
+      program_tele:
+        value_template: "{{ states.media_player.tele.attributes.media_title }}"
+        friendly_name: "Programme Télé"
+      today:
+        value_template: " {{as_timestamp(now())|timestamp_custom('%a', true) }}  "
   - platform: citybikes
     name: "Villo"
     stations:
@@ -164,6 +166,23 @@ sensor:
     station_ids:
         - 5719
         - 5152
+  - platform: history_stats
+    name: TV on
+    entity_id: media_player.tele
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=6).replace(minute=0).replace(second=0) }}'
+    end: '{{ now() }}'          
+  - platform: mqtt
+    state_topic: camera/pizerow/exif/brightness
+    name: Pizero Brightness
+    unit_of_measurement: "%"
+
+    #camera
+camera:
+  - platform: mqtt
+    topic: camera/pizerow
+    name: PiZero
 
 # Text to speech
 tts:
@@ -179,13 +198,13 @@ telegram_bot:
     api_key: !secret tg_api_key 
     parse_mode: html
     allowed_chat_ids:
-      - !secret tg_chat_id
+      - 109359376
 
 switch:
     - platform: tplink
       host: 192.168.1.128
     - platform: rfxtrx
-      automatic_add: true 
+      automatic_dd: true 
     - platform: template
       switches:
         sw_tele:
@@ -210,7 +229,36 @@ notify:
       device-name: gsm_dan
 
 # Zones
-zone: !include_dir_merge_list zones/
+zone:
+  name: ecole
+  latitude: 50.8191122
+  longitude: 4.3387114999
+  radius: 250
+  icon: mdi:school
+zone 2:
+  name: PE BXL
+  latitude: 50.838677499
+  longitude: 4.37628515625006
+  radius: 200
+  icon: mdi:work
+zone 3:
+  name: PE STR
+  latitude: 48.5975758
+  longitude: 7.7686107999999985
+  radius: 250
+  icon: mdi:work
+zone 4:
+  name: STR
+  latitude: 48.60486749999999
+  longitude: 7.754113281249986
+  radius: 250
+  icon: mdi:home
+zone 5:
+  name: Badje
+  latitude: 50.829125
+  longitude: 4.335210
+  radius: 250
+  icon: mdi:work
 
 
 mqtt:
@@ -218,8 +266,8 @@ mqtt:
    port: 1883
    client_id: hassio
    keepalive: 60
-   username: dan
-   password: mosJF26l9
+   username: !secret mqtt_user
+   password: !secret mqtt_pw 
 
 media_player:
   - platform: braviatv
@@ -256,8 +304,8 @@ device_tracker:
 #      - 192.168.1.1
     - platform: asuswrt
       host: 192.168.1.1
-      username: nxd4n
-      password: asuJF26l9
+      username: !secret asus_user
+      password: !secret asus_pw 
       protocol: telnet
     - platform: mqtt_json
       devices:
@@ -270,15 +318,17 @@ zwave:
 
 cover:
   - platform: rfxtrx
-    automatic_add: False
+    automatic_add: false
     signal_repetitions: 1
     devices:
       071a000005555502: # RFY
-        name: Stores éléctriques
+         name: Stores éléctriques
  
 light:
    - platform: yeelight
      devices: 
        192.168.1.71:
-         name: 'Lampe Télé'
+         name: 'Lampe Lecture'
+       192.168.1.89:
+         name: 'lampe Télé'
 

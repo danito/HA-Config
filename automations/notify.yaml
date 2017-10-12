@@ -10,7 +10,7 @@
     - service: notify.dan_gsm
       data:
          title: "La maison vous parle"
-         message: "La télé a été éteinte. {{states('sensor.tv_on')}} "
+         message: " {{states('sensor.time')}}. La télé a été éteinte. {{states('sensor.tv_on')}} "
 
 - id: message_matin
   alias: "Notification: message de 7h30"

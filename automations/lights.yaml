@@ -28,7 +28,7 @@
   action:
     - service: homeassistant.turn_on
       entity_id: light.lampe_tele
-    - service: notity.dan_gsm
+    - service: notify.dan_gsm
       data: 
         message: "La télé a été allumé"
         title: "La maison vous parle"
@@ -43,7 +43,22 @@
     entity_id: media_player.tele
     to: "off"
   action:
+    - delay: 00:01:30
     - service: homeassistant.turn_off
       entity_id: light.lampe_tele
-    - delay: 00:01:30
+   
+- id: lampe_lecture_off
+  alias: "Lampe Télé: éteindre avec télé"
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: media_player.tele
+    to: "off"
+  condition:
+    condition: time
+    after: "23:00:00"
+  action:
+    - delay: 00:0:10
+    - service: homeassistant.turn_off
+      entity_id: light.lampe_lecture
    
