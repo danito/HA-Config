@@ -26,7 +26,8 @@ my home-assistant.io config
 - Send a message to Zanzito when the TV has been switched off (kids screen time control)
 - Switch TV off after 2h of screen time
 - Take a picture every 15min.
-- Switch RPiCam off/on if _not_home after 10 min (if wifi goes down and back up, it seems not to reconnect).
+- Switch RPiCam off/on if _not_home_ after 10 min (if wifi goes down and back up, it seems not to reconnect).
+- Send a payload with Zanzito to the mqtt broker to tts.google_say the time and distance for getting home
 
 ## Custom_components
 
