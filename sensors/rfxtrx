@@ -1,0 +1,12 @@
+
+  - platform: rfxtrx
+    automatic_add: true
+    devices:
+      08500401340200a659:
+        name: rfx_a_659
+      085004069a0300aa50:
+        name: rfx_b_a50
+      0a520308220100aa390049:  
+        name: rxf_c_049
+      085004d11f0200b849:
+        name: rxf_d_849

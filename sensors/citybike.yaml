@@ -1,0 +1,6 @@
+
+  - platform: citybikes
+    name: "Villo"
+    stations:
+       - 234
+       - 236 

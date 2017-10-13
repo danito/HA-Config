@@ -53,7 +53,7 @@ logger:
     #default: debug 
    logs:
       homeassistant.custom_components.sensor: debug
-      homeassistant.components.rfxtrx: info
+      #homeassistant.components.rfxtrx: info
       homeassistant.components.google_travel_time: debug
       homeassistant.components.media_player: debug
       homeassistant.components.device_tracker.mqtt_json: debug
@@ -62,121 +62,9 @@ logger:
 sun:
 
 # rfxtrx
-rfxtrx:
-  device: /dev/ttyUSB0
-  debug: true
-
-# Weather prediction
-sensor:
-  - platform: yr
-    name: Météo
-    monitored_conditions:
-      - temperature
-      - symbol
-      - precipitation
-  - platform: rfxtrx
-    automatic_add: true
-    devices:
-      08500401340200a659:
-        name: rfx_a_659
-      085004069a0300aa50:
-        name: rfx_b_a50
-      0a520308220100aa390049:  
-        name: rxf_c_049
-      085004d11f0200b849:
-        name: rxf_d_849
-  - platform: wunderground
-    api_key: !secret pws_api_key
-    lang: FR
-    monitored_conditions:
-      - location
-      - station_id
-      - solarradiation
-      - temp_high_record_c
-      - temp_high_1d_c
-      - temp_c
-      - temp_low_1d_c
-      - temp_low_record_c
-      - precip_1d
-      - precip_1d_mm
-      - wind_kph
-      - wind_1d_kph
-      - alerts
-      - precip_today_string
-      - weather
-      - weather_1d_metric
-      - weather_1n_metric
-      - weather_2d_metric
-      - weather_2n_metric
-      - weather_3d_metric
-      - weather_3n_metric
-      - weather_4d_metric
-      - weather_4n_metric
-       
-
-    #- platform: gtfs
-    #    origin: 5719
-    #    destination: 9658
-    #    data: gtfs.zip
-    #    name: GTFS
-  - platform: google_travel_time
-    api_key: !secret google_api_key
-    name: Retour à la maison
-    origin: device_tracker.dan_oneplus5
-    destination: zone.home
-    options:
-       mode: driving
-       #mode: bicycling
-  - platform: google_travel_time
-    api_key: !secret google_api_key
-    name: Ecole
-    origin: zone.home
-    destination: zone.ecole
-    options:
-       mode: transit
-  - platform: time_date
-    display_options:
-            - 'date_time'
-            - 'time'
-  - platform: systemmonitor
-    resources:
-      - type: memory_free
-      - type: memory_use_percent
-      - type: processor_use
-      - type: since_last_boot
-  - platform: template
-    sensors:
-      solar_angle:
-        value_template: '{{ states.sun.sun.attributes.elevation }}'
-        friendly_name: 'Sun angle'
-        unit_of_measurement: 'degrees'
-      sunrise:
-        value_template: '{{ states.sun.sun.attributes.next_rising }}'
-      program_tele:
-        value_template: "{{ states.media_player.tele.attributes.media_title }}"
-        friendly_name: "Programme Télé"
-      today:
-        value_template: " {{as_timestamp(now())|timestamp_custom('%a', true) }}  "
-  - platform: citybikes
-    name: "Villo"
-    stations:
-       - 234
-       - 236 
-  - platform: stib
-    station_ids:
-        - 5719
-        - 5152
-  - platform: history_stats
-    name: TV on
-    entity_id: media_player.tele
-    state: 'on'
-    type: time
-    start: '{{ now().replace(hour=6).replace(minute=0).replace(second=0) }}'
-    end: '{{ now() }}'          
-  - platform: mqtt
-    state_topic: camera/pizerow/exif/brightness
-    name: Pizero Brightness
-    unit_of_measurement: "%"
+#rfxtrx:
+#  device: /dev/ttyUSB0
+#  debug: true
 
     #camera
 camera:
@@ -190,8 +78,10 @@ tts:
     language: "fr"
 
 group: !include groups.yaml
-# automation: !include automations.yaml
+switch: !include switch.yaml
+zone: !include zones.yaml
 automation: !include_dir_merge_list automations/
+sensor: !include_dir_merge_list sensors/
 
 telegram_bot:
   - platform: polling
@@ -200,22 +90,6 @@ telegram_bot:
     allowed_chat_ids:
       - 109359376
 
-switch:
-    - platform: tplink
-      host: 192.168.1.128
-    - platform: rfxtrx
-      automatic_dd: true 
-    - platform: template
-      switches:
-        sw_tele:
-          friendly_name: 'Télé'
-          value_template: " {{ is_state('media_player.tele', 'on') }} "
-          turn_on:
-            service: media_player.turn_on
-            entity_id: media_player.tele
-          turn_off:
-            service: media_player.turn_off
-            entity_id: media_player.tele
 
 notify:
     - name: pushbullet
@@ -227,38 +101,6 @@ notify:
     - name: dan_gsm
       platform: zanzito
       device-name: gsm_dan
-
-# Zones
-zone:
-  name: ecole
-  latitude: 50.8191122
-  longitude: 4.3387114999
-  radius: 250
-  icon: mdi:school
-zone 2:
-  name: PE BXL
-  latitude: 50.838677499
-  longitude: 4.37628515625006
-  radius: 200
-  icon: mdi:work
-zone 3:
-  name: PE STR
-  latitude: 48.5975758
-  longitude: 7.7686107999999985
-  radius: 250
-  icon: mdi:work
-zone 4:
-  name: STR
-  latitude: 48.60486749999999
-  longitude: 7.754113281249986
-  radius: 250
-  icon: mdi:home
-zone 5:
-  name: Badje
-  latitude: 50.829125
-  longitude: 4.335210
-  radius: 250
-  icon: mdi:work
 
 
 mqtt:
@@ -291,17 +133,6 @@ device_tracker:
       waypoint_whitelist:
       - travail
       - ecole
-#    - platform: nmap_tracker
-#      hosts: 192.168.1.1/24
-#      track_new_devices: yes
-#      home_interval: 10
-#      exclude:
-#      - 192.168.1.10
-#      - 192.168.1.11
-#      - 192.168.1.16
-#      - 192.168.1.43
-#      - 192.168.1.56
-#      - 192.168.1.1
     - platform: asuswrt
       host: 192.168.1.1
       username: !secret asus_user
@@ -316,14 +147,14 @@ weather:
 zwave:    
   usb_path: /dev/ttyACM0
 
-cover:
-  - platform: rfxtrx
-    automatic_add: false
-    signal_repetitions: 1
-    devices:
-      071a000005555502: # RFY
-         name: Stores éléctriques
- 
+  #cover:
+  #  - platform: rfxtrx
+  #    automatic_add: false
+  #    signal_repetitions: 1
+  #    devices:
+  #      071a000005555502: # RFY
+  #         name: Stores éléctriques
+  # 
 light:
    - platform: yeelight
      devices: 

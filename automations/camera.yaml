@@ -10,6 +10,13 @@
       - condition: time
         after: '06:00:00'
         before: '21:00:00'
+        weekday:
+          - sat
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
   action:
       service: mqtt.publish
       data:
@@ -19,7 +26,7 @@
 
 - id: restart_wifi_off
   alias: "Camera: redémarrer si wifi éteint"
-  initial_state: 'on'
+  initial_state: 'off'
   trigger:
     platform: state
     entity_id: device_tracker.rpicam
@@ -33,6 +40,19 @@
     - service: switch.turn_on
       entity_id: switch.fi_plug_switch
 
-    
+- id: restart_cam_mqtt
+  initial_state: 'on'
+  alias: "Caméra: redémarrer prise FI avec mqtt"
+  trigger:
+     platform: mqtt
+     topic: hassio/switch/fiplug
+     payload: 'reboot'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.fi_plug_switch
+    - delay: 00:00:20
+    - service: switch.turn_on
+      entity_id: switch.fi_plug_switch
+
 
         

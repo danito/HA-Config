@@ -1,0 +1,5 @@
+
+  - platform: stib
+    station_ids:
+        - 5719
+        - 5152

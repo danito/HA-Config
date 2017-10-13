@@ -7,7 +7,9 @@
       - group.media_states
       - group.all_lights
       - group.all_switches
+      - switch.fi_plug_switch
       - group.trajets
+      - group.cameras
       - group.stib_saint_denis
       - group.all_media_players
       - group.all_covers
@@ -32,13 +34,15 @@
        - group.statistics
        - group.all_automations
        - group.rfxtrx_sensors
-       - sensor.085004bf1f02008d49_temperature
+       - group.rpicam
+         #- sensor.085004bf1f02008d49_temperature
+
 
   lampes_salon:
     name: 'Lampes salon'
     entities:
       - light.lampe_tele
-      - switch.lampe_lecture
+      - light.lampe_lecture
       - switch.sw_tele
 
   medias_states:
@@ -163,3 +167,18 @@
      icon: mdi:chart-line
      entities:
        - sensor.tv_on
+       - sensor.program_tele
+       - sensor.pizero_brightness
+
+  cameras:
+     name: Cameras
+     icon: mdi:cctv
+     entities:
+       - camera.pizero
+  
+  rpicam:
+    name: RPiCam
+    icon: mdi:cctv
+    entities:
+      - device_tracker.rpicam
+      - switch.fi_plug_switch

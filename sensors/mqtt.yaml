@@ -1,0 +1,5 @@
+
+  - platform: mqtt
+    state_topic: camera/pizerow/exif/brightness
+    name: Pizero Brightness
+    unit_of_measurement: "%"

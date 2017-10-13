@@ -1,0 +1,28 @@
+
+  - platform: wunderground
+    api_key: !secret pws_api_key
+    lang: FR
+    monitored_conditions:
+      - location
+      - station_id
+      - solarradiation
+      - temp_high_record_c
+      - temp_high_1d_c
+      - temp_c
+      - temp_low_1d_c
+      - temp_low_record_c
+      - precip_1d
+      - precip_1d_mm
+      - wind_kph
+      - wind_1d_kph
+      - alerts
+      - precip_today_string
+      - weather
+      - weather_1d_metric
+      - weather_1n_metric
+      - weather_2d_metric
+      - weather_2n_metric
+      - weather_3d_metric
+      - weather_3n_metric
+      - weather_4d_metric
+      - weather_4n_metric

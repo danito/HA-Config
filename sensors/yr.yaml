@@ -1,0 +1,7 @@
+
+  - platform: yr
+    name: Météo
+    monitored_conditions:
+      - temperature
+      - symbol
+      - precipitation

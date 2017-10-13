@@ -1,0 +1,16 @@
+
+  - platform: google_travel_time
+    api_key: !secret google_api_key
+    name: Retour à la maison
+    origin: device_tracker.dan_oneplus5
+    destination: zone.home
+    options:
+       mode: driving
+       #mode: bicycling
+  - platform: google_travel_time
+    api_key: !secret google_api_key
+    name: Ecole
+    origin: zone.home
+    destination: zone.ecole
+    options:
+       mode: transit

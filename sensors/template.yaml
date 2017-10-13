@@ -1,0 +1,14 @@
+
+  - platform: template
+    sensors:
+      solar_angle:
+        value_template: '{{ states.sun.sun.attributes.elevation }}'
+        friendly_name: 'Sun angle'
+        unit_of_measurement: 'degrees'
+      sunrise:
+        value_template: '{{ states.sun.sun.attributes.next_rising }}'
+      program_tele:
+        value_template: "{{ states.media_player.tele.attributes.media_title }}"
+        friendly_name: "Programme Télé"
+      today:
+        value_template: " {{as_timestamp(now())|timestamp_custom('%a', true) }}  "
