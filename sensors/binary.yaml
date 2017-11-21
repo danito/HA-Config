@@ -1,0 +1,13 @@
+- platform: template
+  sensors: 
+    bs_dan_str:
+      value_template: "{{'STR' in states('device_tracker.dan_oneplus5')}}"
+      friendly_name: "Dan à Strasbourg"
+
+- platform: mqtt
+  state_topic: "hassio/sensor/velux" 
+  name: "Velux"
+  device_class: opening
+
+                    
+

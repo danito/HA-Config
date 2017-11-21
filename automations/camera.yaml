@@ -1,28 +1,37 @@
-
+ 
 - id: chantier
   alias: "Camera: Prendre une photo du chantier"
   initial_state: 'on'
   trigger:
-       platform: time
-       minutes: "/15"
-       seconds: 00
-  condition:
-      - condition: time
-        after: '06:00:00'
-        before: '21:00:00'
-        weekday:
-          - sat
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
+    platform: time
+    minutes: "/5"
+    seconds: 00
+  condition: 
+    condition: state
+    entity_id: input_boolean.sun_daylight
+    state: 'on'
   action:
       service: mqtt.publish
       data:
         topic: "hassio/switch/take"
         payload: "on"
 
+- id: move_picture
+  alias: "Camera: renommer et archiver images"
+  initial_state: 'on'
+  trigger: 
+    platform: state
+    entity_id: input_boolean.sun_daylight
+    to: 'off'
+    for:
+      minutes: 30 
+  action:
+     service: mqtt.publish
+     data:
+       topic: "hassio/switch/move"
+       payload: "move"
+  
+        
 
 - id: restart_wifi_off
   alias: "Camera: redémarrer si wifi éteint"
@@ -54,5 +63,33 @@
     - service: switch.turn_on
       entity_id: switch.fi_plug_switch
 
+- id: sw_sun_daylight_on
+  initial_state: "on"
+  alias: "Boolean:  près lever du soleil"
+  trigger:
+    platform: sun
+    event: sunrise
+    offset: "-00:30:00"
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.sun_daylight
+    - service: notify.telegram
+      data:
+        message: "Soleil levé"
 
-        
+- id: sw_sun_daylight_off
+  initial_state: "on"
+  alias: "Boolean: coucher du soleil"
+  trigger:
+    platform: sun
+    event: sunset
+    offset: "00:45:00"
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.sun_daylight
+    - service: notify.telegram
+      data:
+        message: "Soleil couché"
+

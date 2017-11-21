@@ -56,3 +56,13 @@ sensor.0a52030222010093380049_temperature:
   # Groups
 group.all_automations:
   hidden: false
+group.all_lights:
+  hidden: false
+group.all_switches:
+  hidden: false
+group.all_sensors:
+  hidden: false
+
+  sensor.bs_dan_str:
+    device_class: occupancy
+

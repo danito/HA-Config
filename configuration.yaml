@@ -52,8 +52,10 @@ logger:
    default: warning 
     #default: debug 
    logs:
+      rflink: debug
+      influxdb: debug
       homeassistant.custom_components.sensor: debug
-      #homeassistant.components.rfxtrx: info
+      homeassistant.components.rflink: debug
       homeassistant.components.google_travel_time: debug
       homeassistant.components.media_player: debug
       homeassistant.components.device_tracker.mqtt_json: debug
@@ -65,6 +67,10 @@ sun:
 #rfxtrx:
 #  device: /dev/ttyUSB0
 #  debug: true
+#
+#rflink
+#  port: /dev/ttyACM1 
+
 
     #camera
 camera:
@@ -90,6 +96,9 @@ telegram_bot:
     allowed_chat_ids:
       - 109359376
 
+google:
+  client_id: !secret gcal_client_id
+  client_secret: !secret gcal_client_secret 
 
 notify:
     - name: pushbullet
@@ -144,6 +153,9 @@ device_tracker:
 
 weather:
 
+influxdb:
+  host: 192.168.1.10
+
 zwave:    
   usb_path: /dev/ttyACM0
 
@@ -162,4 +174,12 @@ light:
          name: 'Lampe Lecture'
        192.168.1.89:
          name: 'lampe Télé'
+       192.168.1.45:
+        name: 'lampe grenier'
+   - platform: rflink
+     automatic_add: true
 
+input_boolean:
+  sun_daylight:
+    name: 'Soleil levé'
+    icon: mdi:weather-sunset-up

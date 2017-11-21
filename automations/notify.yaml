@@ -33,7 +33,12 @@
       entity_id: media_player.mpd_pirate_radio
       data_template: 
       #         message:  "il fait {{states('sensor.pws_temp_high_1d_c')}} "
-        message: "Bonjour. il est {{states('sensor.time').replace(':','h')}}. Il est temps de s'habiller. La météo pour aujourd'hui: actuellement il fait {{states('sensor.pws_weather')}} avec {{states('sensor.pws_temp_c')|int}} degrés et on prévoit jusqu'à {{states('sensor.pws_temp_high_1d_c')|int}} degrés. Il y a  {{states('sensor.pws_precip_1d')}} % de chances de pluie aujourd'hui."
+        message: >
+          {% if is_state("calendar.nixekinder", "on") -%}
+          {% set al=states.calendar.nixekinder.attributes.description %}
+          {% set alerte="Ne pas oublier: " ~ alerte %}
+          {%-endif%}
+          "Bonjour. il est {{states('sensor.time').replace(':','h')}}. Il est temps de s'habiller. La météo pour aujourd'hui: actuellement il fait {{states('sensor.pws_weather')}} avec {{states('sensor.pws_temp_c')|int}} degrés et on prévoit jusqu'à {{states('sensor.pws_temp_high_1d_c')|int}} degrés. Il y a  {{states('sensor.pws_precip_1d')}} % de risques de pluie aujourd'hui. {{alerte}}"
     - service: media_player.media_stop
       entity_id: media_player.mpd_pirate_radio
 
@@ -50,4 +55,28 @@
      service: notify.telegram
      data:
         message: "Lampe allumée"
+
+- id: message_matin_7h45
+  alias: "Notification: message de 7h45"
+  initial_state: "on"
+  trigger:
+    platform: time
+    at: '07:45:00'
+  condition:
+    condition: time
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+  action:
+    - service: media_player.media_play_pause
+      entity_id: media_player.mpd_pirate_radio
+    - service: tts.google_say
+      entity_id: media_player.mpd_pirate_radio
+      data_template: 
+        message: "Bonjour. il est {{states('sensor.time').replace(':','h')}}. Il est temps de partir. Le prochain bus 54 arrive dans {{states.sensor.stib_5719_saintdenis_b54.attributes.next_departure }} et  {{states.sensor.stib_5719_saintdenis_b54.attributes.upcoming_departure }} minutes."
+    - service: media_player.media_stop
+      entity_id: media_player.mpd_pirate_radio
 

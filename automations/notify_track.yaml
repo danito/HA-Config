@@ -1,0 +1,31 @@
+
+- id: notif_qnap_away
+  alias: "Notification: qnap hors réseau"
+  initial_state: 'on'
+  trigger:
+     platform: state
+     entity_id: device_tracker.jf26n
+     from: "home"
+     to: "not_home"
+     for: 
+       minutes: 30
+  action:
+     service: notify.telegram
+     data:
+        message: "qnap pas vu depuis 30min"
+
+
+- id: notif_rpicam_away
+  alias: "Notification: rpicam hors réseau"
+  initial_state: 'on'
+  trigger:
+     platform: state
+     entity_id: device_tracker.rpicam
+     from: "home"
+     to: "not_home"
+     for: 
+       minutes: 30
+  action:
+     service: notify.telegram
+     data:
+        message: "RPICAM pas vu depuis 30min"

@@ -1,0 +1,27 @@
+
+# Zones
+  - name: ecole
+    latitude: 50.8191122
+    longitude: 4.3387114999
+    radius: 250
+    icon: mdi:school
+  - name: PE BXL
+    latitude: 50.838677499
+    longitude: 4.37628515625006
+    radius: 200
+    icon: mdi:work
+  - name: PE STR
+    latitude: 48.5975758
+    longitude: 7.7686107999999985
+    radius: 250
+    icon: mdi:work
+  - name: STR
+    latitude: 48.60486749999999
+    longitude: 7.754113281249986
+    radius: 250
+    icon: mdi:home
+  - name: Badje
+    latitude: 50.829125
+    longitude: 4.335210
+    radius: 250
+    icon: mdi:work

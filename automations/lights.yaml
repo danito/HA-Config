@@ -8,11 +8,11 @@
     offset: "-01:00:00"
   condition:  
     condition: state
-    entity_id: switch.lampe_lecture
+    entity_id: light.lampe_lecture
     state: "off"
   action:   
     service: homeassistant.turn_on
-    entity_id: switch.lampe_lecture
+    entity_id: light.lampe_lecture
 
 - id: lampe_tele_on
   alias: 'Lampe Télé: allumer avec télé'
@@ -43,12 +43,11 @@
     entity_id: media_player.tele
     to: "off"
   action:
-    - delay: 00:01:30
     - service: homeassistant.turn_off
       entity_id: light.lampe_tele
    
 - id: lampe_lecture_off
-  alias: "Lampe Télé: éteindre avec télé"
+  alias: "Lampe Lecture: éteindre avec télé"
   initial_state: 'on'
   trigger:
     platform: state
@@ -56,9 +55,8 @@
     to: "off"
   condition:
     condition: time
-    after: "23:00:00"
+    after: "22:40:00"
   action:
-    - delay: 00:0:10
     - service: homeassistant.turn_off
       entity_id: light.lampe_lecture
    

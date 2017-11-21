@@ -5,6 +5,8 @@
       - group.gsm
       - group.lampes_salon
       - group.media_states
+      - device_tracker.mael
+      - sensor.bs_dan_str
       - group.all_lights
       - group.all_switches
       - switch.fi_plug_switch
@@ -14,6 +16,7 @@
       - group.all_media_players
       - group.all_covers
       - cover.stores_electriques
+      - group.velux
 
 
   meteo:
@@ -32,11 +35,19 @@
     icon: mdi:home-assistant
     entities:
        - group.statistics
+       - group.all_lights
        - group.all_automations
        - group.rfxtrx_sensors
        - group.rpicam
+       - group.qnap
          #- sensor.085004bf1f02008d49_temperature
-
+  
+  calendars:
+    name: calendriers
+    view: yes
+    icon: mdi:calendar
+    entities:
+      - group.gr_calendriers
 
   lampes_salon:
     name: 'Lampes salon'
@@ -48,7 +59,7 @@
   medias_states:
     name: 'Audio video'
     entities:
-      - swicthes.sw_tele
+      - switch.sw_tele
       
   all_weather:
     name: Météo
@@ -123,6 +134,7 @@
      - group.tel_dan
      - group.tel_sophie
      - device_tracker.mael
+     - sensor.bs_dan_str
   all_media_players:
     name: "Média Players"
     entities:
@@ -175,6 +187,12 @@
      icon: mdi:cctv
      entities:
        - camera.pizero
+
+  qnap:
+    name: Qnap
+    icon: mdi:server
+    entities:
+      - device_tracker.jf26n
   
   rpicam:
     name: RPiCam
@@ -182,3 +200,20 @@
     entities:
       - device_tracker.rpicam
       - switch.fi_plug_switch
+      - input_boolean.sun_daylight
+
+  velux:
+    name: Velux
+    icon: mdi:window-closed
+    entities:
+     - sensor.velux
+
+  gr_calendriers:
+    name: Google Calendrier
+    entities:
+      - calendar.danielnixgmailcom
+      - calendar.calendrier_scolaire_de_la_federation_walloniebruxelles
+      - calendar.jours_feries_en_belgique
+      - calendar.nixekinder
+      - calendar.piscine
+

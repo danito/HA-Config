@@ -1,0 +1,12 @@
+  - platform: qnap
+    host: 192.168.1.16
+    username: !secret qnap_user
+    password: !secret qnap_pwd
+    verify_ssl: false
+    monitored_conditions:
+      - status
+      - cpu_usage
+      - memory_percent_used
+      - network_tx
+      - volume_percentage_used
+
