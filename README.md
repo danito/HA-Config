@@ -14,6 +14,8 @@ my home-assistant.io config
 - Sony BraviaTV
 - RPi Zero W with camera
 - QNAP TS-212p
+- QNAP TS-431p
+- Tado thermostats
 
 ## Software
 - Zanzito
